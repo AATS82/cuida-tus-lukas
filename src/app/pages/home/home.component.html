@@ -1,0 +1,188 @@
+<div class="bg-surface text-on-background min-h-screen">
+  <app-header />
+
+  <main class="pt-24 pb-32">
+
+    <!-- Hero Section -->
+    <section class="px-6 py-16 md:py-24 max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full text-sm font-bold mb-8">
+        <span class="material-symbols-outlined text-sm fill-icon">verified_user</span>
+        Respaldado por la CMF Chile
+      </div>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-primary leading-[1.1] tracking-tight mb-8">
+        ¿Te invitaron a invertir? <br/>
+        <span class="text-primary-container">Verifica si es estafa</span> antes de transferir.
+      </h1>
+      <p class="text-on-surface-variant text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">
+        Protegemos tu patrimonio analizando plataformas de inversión y entidades no autorizadas por la CMF.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="relative max-w-3xl mx-auto">
+        <div class="bg-surface-container-lowest rounded-full p-2 shadow-[0_20px_50px_rgba(0,0,0,0.08)] flex items-center gap-2 border border-outline-variant/20 focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
+          <div class="pl-6 text-outline">
+            <span class="material-symbols-outlined">search</span>
+          </div>
+          <input
+            [(ngModel)]="query"
+            (keyup.enter)="analizar()"
+            class="w-full bg-transparent border-none focus:ring-0 text-on-surface text-lg py-4 placeholder:text-outline/60"
+            placeholder="Ingresa el link de la plataforma o el RUT..."
+            type="text"
+          />
+          <button
+            (click)="analizar()"
+            class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold text-lg hover:brightness-110 active:scale-95 transition-all shadow-lg whitespace-nowrap">
+            Analizar Riesgo
+          </button>
+        </div>
+        <div class="mt-6 flex flex-wrap justify-center gap-4 text-sm font-medium text-on-surface-variant">
+          <span class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm fill-icon">verified_user</span> Monitoreo en tiempo real
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm fill-icon">gavel</span> Base de datos CMF
+          </span>
+          <span class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm fill-icon">security</span> 100% Gratuito
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hero Image -->
+    <section class="px-6 max-w-7xl mx-auto mb-12">
+      <div class="relative rounded-[32px] overflow-hidden h-64 md:h-80 shadow-xl">
+        <img
+          src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=80"
+          alt="Santiago de Chile — centro financiero"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/40 to-transparent flex items-center px-10 md:px-16">
+          <div>
+            <p class="text-white/80 text-sm font-semibold uppercase tracking-widest mb-2">Santiago, Chile</p>
+            <h2 class="text-white text-3xl md:text-4xl font-extrabold leading-tight max-w-md">
+              Tu dinero merece protección institucional
+            </h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid -->
+    <section class="px-6 py-12 max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+        <!-- Verification Card -->
+        <div class="md:col-span-8 bg-surface-container-low rounded-[32px] p-10 relative overflow-hidden group">
+          <div class="relative z-10 flex flex-col h-full justify-between gap-12">
+            <div>
+              <div class="inline-flex items-center gap-2 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full text-sm font-bold mb-6">
+                <span class="material-symbols-outlined text-sm fill-icon">check_circle</span>
+                ENTIDAD VERIFICADA
+              </div>
+              <h2 class="text-3xl font-bold text-primary mb-4 leading-tight">¿Cómo identificar una institución legítima?</h2>
+              <p class="text-on-surface-variant text-lg max-w-md">Toda entidad financiera en Chile debe estar inscrita en los registros de la CMF. Si no figura, tu dinero está en riesgo.</p>
+            </div>
+            <div class="flex gap-4">
+              <a routerLink="/resultado" class="bg-primary-container text-on-primary px-6 py-3 rounded-xl font-bold hover:shadow-xl transition-all cursor-pointer">
+                Ver Instituciones Autorizadas
+              </a>
+            </div>
+          </div>
+          <div class="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent flex items-center justify-center opacity-40 group-hover:opacity-100 transition-opacity">
+            <span class="material-symbols-outlined text-[180px] text-primary/10 select-none fill-icon">verified_user</span>
+          </div>
+        </div>
+
+        <!-- Report Card -->
+        <div class="md:col-span-4 bg-primary text-white rounded-[32px] p-10 flex flex-col justify-between">
+          <span class="material-symbols-outlined text-4xl text-secondary-fixed fill-icon">campaign</span>
+          <div>
+            <h3 class="text-2xl font-bold mb-4">Reportar sospecha</h3>
+            <p class="text-primary-fixed/80 mb-6">Si fuiste contactado por redes sociales o WhatsApp con ofertas "demasiado buenas", infórmanos para alertar a otros.</p>
+            <a routerLink="/reportar" class="block w-full bg-surface-container-lowest text-primary py-4 rounded-xl font-bold active:scale-95 transition-transform text-center cursor-pointer">
+              Iniciar Reporte Anónimo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Alertas Recientes -->
+    <section class="px-6 py-20 max-w-7xl mx-auto">
+      <div class="flex items-end justify-between mb-12">
+        <div>
+          <h2 class="text-3xl font-bold text-primary mb-2">Alertas Recientes</h2>
+          <p class="text-on-surface-variant font-medium">Plataformas detectadas con alto riesgo de fraude en los últimos 7 días.</p>
+        </div>
+        <a routerLink="/resultado" class="text-primary font-bold flex items-center gap-1 hover:underline">
+          Ver historial completo <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        @for (alerta of displayAlertas; track alerta.nombre ?? alerta['name']) {
+          <div class="bg-surface-container-lowest p-8 rounded-[32px] shadow-sm hover:shadow-xl transition-all duration-300 group border border-transparent hover:border-error-container">
+            <div class="w-14 h-14 bg-error-container text-on-error-container rounded-2xl flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-3xl">{{ alerta.icono }}</span>
+            </div>
+            <h3 class="text-xl font-bold text-on-background mb-2">{{ alerta.nombre ?? alerta['name'] }}</h3>
+            <p class="text-on-surface-variant mb-6 text-sm">{{ alerta.descripcion ?? alerta['description'] }}</p>
+            <div class="pt-6 border-t border-surface-container-high flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-widest text-error">Riesgo Crítico</span>
+              <span class="text-xs text-outline">{{ alerta.tiempo ?? alerta['tiempoRelativo'] }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Stats / Institutional Badge -->
+    <section class="px-6 py-20 bg-surface-container-low mt-12 overflow-hidden relative">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12 relative z-10">
+        <div class="flex-1">
+          <div class="w-32 h-32 bg-secondary-fixed rounded-full flex items-center justify-center shadow-2xl mb-8 outline outline-8 outline-white/20">
+            <span class="material-symbols-outlined text-6xl text-on-secondary-fixed-variant fill-icon">shield</span>
+          </div>
+          <h2 class="text-4xl font-extrabold text-primary mb-6">Respaldo Institucional</h2>
+          <p class="text-on-surface-variant text-lg leading-relaxed max-w-xl">
+            Este sistema utiliza los registros oficiales de la Comisión para el Mercado Financiero (CMF) y algoritmos de detección de patrones fraudulentos para proteger a la ciudadanía de estafas piramidales y suplantaciones.
+          </p>
+        </div>
+        <div class="flex-1 w-full grid grid-cols-2 gap-4">
+          @for (stat of displayStats; track stat.valor) {
+            <div class="bg-white p-8 rounded-3xl shadow-sm">
+              <h4 class="text-3xl font-bold text-primary mb-2">{{ stat.valor }}</h4>
+              <p class="text-sm font-semibold text-outline uppercase tracking-wider">{{ stat.label }}</p>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+    </section>
+
+    <!-- Cómo funciona -->
+    <section class="px-6 py-20 max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-primary mb-4">¿Cómo funciona?</h2>
+        <p class="text-on-surface-variant text-lg max-w-xl mx-auto">Tres pasos para proteger tu patrimonio antes de realizar cualquier transferencia.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        @for (paso of pasos; track paso.numero) {
+          <div class="text-center p-8 bg-surface-container-lowest rounded-[32px] shadow-sm hover:shadow-md transition-all">
+            <div class="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span class="text-white text-2xl font-black">{{ paso.numero }}</span>
+            </div>
+            <span class="material-symbols-outlined text-4xl text-primary mb-4 block fill-icon">{{ paso.icono }}</span>
+            <h3 class="text-xl font-bold text-on-background mb-3">{{ paso.titulo }}</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">{{ paso.descripcion }}</p>
+          </div>
+        }
+      </div>
+    </section>
+
+  </main>
+
+  <app-footer />
+  <app-bottom-nav />
+</div>

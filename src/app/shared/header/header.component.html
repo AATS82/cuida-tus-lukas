@@ -1,0 +1,33 @@
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-slate-50/90 backdrop-blur-xl shadow-sm">
+  <a routerLink="/" class="flex items-center gap-3 group">
+    <div class="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-md">
+      <span class="material-symbols-outlined text-white text-xl fill-icon">shield</span>
+    </div>
+    <span class="text-xl font-bold text-primary uppercase tracking-wider">CuidaTusLukas</span>
+  </a>
+
+  <nav class="hidden md:flex items-center gap-8 font-['Public_Sans']">
+    <a routerLink="/" routerLinkActive="text-primary-container border-b-4 border-primary-container pb-1 font-semibold"
+       [routerLinkActiveOptions]="{exact: true}"
+       class="text-on-surface-variant hover:text-primary transition-colors px-2 py-1">
+      Inicio
+    </a>
+    <a routerLink="/resultado" routerLinkActive="text-primary-container border-b-4 border-primary-container pb-1 font-semibold"
+       class="text-on-surface-variant hover:text-primary transition-colors px-2 py-1">
+      Alertas
+    </a>
+    <a routerLink="/reportar" routerLinkActive="text-primary-container border-b-4 border-primary-container pb-1 font-semibold"
+       class="text-on-surface-variant hover:text-primary transition-colors px-2 py-1">
+      Reportar
+    </a>
+  </nav>
+
+  <div class="flex items-center gap-3">
+    <button class="p-2 hover:bg-slate-100 rounded-full transition-colors" aria-label="Ayuda">
+      <span class="material-symbols-outlined text-primary-container">help</span>
+    </button>
+    <button class="p-2 hover:bg-slate-100 rounded-full transition-colors" aria-label="Cuenta">
+      <span class="material-symbols-outlined text-primary-container">account_circle</span>
+    </button>
+  </div>
+</header>

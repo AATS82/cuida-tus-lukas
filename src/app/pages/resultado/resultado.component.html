@@ -1,0 +1,154 @@
+<div class="bg-surface text-on-background min-h-screen pb-32">
+  <app-header />
+
+  <main class="pt-24 px-4 md:px-8 max-w-4xl mx-auto">
+
+    <!-- Alerta roja principal -->
+    <section class="mb-10">
+      <div class="bg-error-container p-8 rounded-xl shadow-[0_10px_40px_rgba(186,26,26,0.1)] border-l-8 border-error">
+        <div class="flex items-start gap-6">
+          <div class="bg-error text-white p-4 rounded-full shrink-0">
+            <span class="material-symbols-outlined text-4xl fill-icon">shield</span>
+          </div>
+          <div class="flex-1">
+            <h1 class="text-3xl font-extrabold text-on-error-container mb-2 leading-tight">
+              ¡Alerta Roja! Alto riesgo de estafa
+            </h1>
+            @if (query()) {
+              <p class="text-on-surface-variant font-semibold mb-2">Análisis de: <span class="text-error font-bold">{{ query() }}</span></p>
+            }
+            <p class="text-on-surface-variant text-lg">Este sitio web o entidad presenta múltiples características de una plataforma fraudulenta no autorizada.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid de análisis -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+
+      <!-- CMF Card -->
+      <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <span class="material-symbols-outlined text-error text-3xl fill-icon">cancel</span>
+          <span class="text-xs font-bold bg-error-container text-on-error-container px-3 py-1 rounded-full uppercase">Crítico</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">¿Está regulado por la CMF Chile?</h3>
+        <p class="text-on-surface-variant mb-6">No se encontraron registros de esta entidad en la base de datos de la Comisión para el Mercado Financiero.</p>
+        <div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary">info</span>
+          <span class="text-sm font-medium text-primary">Solo opere con entidades autorizadas.</span>
+        </div>
+      </div>
+
+      <!-- Antigüedad del dominio -->
+      <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <span class="material-symbols-outlined text-error text-3xl fill-icon">cancel</span>
+          <span class="text-xs font-bold bg-error-container text-on-error-container px-3 py-1 rounded-full uppercase">Alerta</span>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Antigüedad del dominio web</h3>
+        <p class="text-on-surface-variant mb-6">El dominio fue registrado hace menos de 3 meses. Las estafas suelen usar sitios web de vida corta.</p>
+        <div class="flex gap-2">
+          <div class="h-2 flex-1 bg-error rounded-full"></div>
+          <div class="h-2 flex-1 bg-surface-container-high rounded-full"></div>
+          <div class="h-2 flex-1 bg-surface-container-high rounded-full"></div>
+        </div>
+        <div class="flex justify-between text-xs text-outline mt-2">
+          <span>Nuevo (riesgo)</span>
+          <span>+1 año (seguro)</span>
+        </div>
+      </div>
+
+      <!-- Reportes comunidad -->
+      <div class="md:col-span-2 bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl font-bold mb-1">Reportes de la comunidad</h3>
+            <p class="text-on-surface-variant">Actividad reciente detectada por usuarios chilenos.</p>
+          </div>
+          <div class="mt-4 md:mt-0 flex items-center gap-2">
+            <span class="text-3xl font-black text-error">12</span>
+            <span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Denuncias</span>
+          </div>
+        </div>
+        <div class="space-y-4">
+          @for (t of testimonios; track t) {
+            <div class="flex items-center gap-4 p-3 bg-surface rounded-lg">
+              <span class="material-symbols-outlined text-error shrink-0">warning</span>
+              <span class="text-sm italic">{{ t }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Verification Badge -->
+    <div class="mb-12 flex flex-col items-center justify-center p-8 bg-surface-container rounded-3xl text-center">
+      <div class="w-24 h-24 rounded-full bg-secondary-fixed flex items-center justify-center mb-4 shadow-lg border-4 border-white/50">
+        <span class="material-symbols-outlined text-4xl text-on-secondary-fixed-variant fill-icon">verified</span>
+      </div>
+      <h4 class="text-xl font-bold text-primary mb-2">Aprenda a Identificar</h4>
+      <p class="text-on-surface-variant max-w-md mx-auto">Las instituciones reales nunca le pedirán transferencias a cuentas de personas naturales.</p>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+      <a routerLink="/" class="w-full sm:w-auto h-14 px-8 rounded-xl bg-surface-container-high text-on-surface font-bold hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined">search</span>
+        Volver a buscar
+      </a>
+      <a routerLink="/reportar" class="w-full sm:w-auto h-14 px-8 rounded-xl bg-primary text-on-primary font-bold hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg">
+        <span class="material-symbols-outlined">campaign</span>
+        Reportar esta entidad
+      </a>
+    </div>
+
+    <!-- Alertas recientes completas -->
+    <section class="mb-12">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-bold text-primary mb-1">Historial de Alertas</h2>
+          <p class="text-on-surface-variant text-sm">Plataformas reportadas en los últimos 30 días.</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        @for (a of alertasRecientes; track a.nombre) {
+          <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm hover:shadow-md transition-all border border-transparent hover:border-error-container flex items-start gap-4">
+            <div class="w-10 h-10 bg-error-container text-on-error-container rounded-xl flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-lg">warning</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-on-background mb-1 truncate">{{ a.nombre }}</h4>
+              <p class="text-on-surface-variant text-sm mb-2">{{ a.descripcion }}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-widest text-error">Riesgo Crítico</span>
+                <span class="text-xs text-outline">{{ a.tiempo }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Imagen institucional -->
+    <div class="relative rounded-[24px] overflow-hidden h-48 mb-8 shadow-md">
+      <img
+        src="https://images.unsplash.com/photo-1464938050520-ef2270bb8ce8?w=1000&q=80"
+        alt="Sede CMF Chile"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-primary/75 to-transparent flex items-center px-8">
+        <div>
+          <p class="text-white/80 text-xs font-semibold uppercase tracking-widest mb-1">Comisión para el Mercado Financiero</p>
+          <h3 class="text-white text-2xl font-extrabold leading-tight max-w-xs">
+            Denuncie. Proteja a otros chilenos.
+          </h3>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <app-footer />
+  <app-bottom-nav />
+</div>

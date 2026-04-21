@@ -1,0 +1,157 @@
+<div class="bg-surface text-on-surface min-h-screen pb-32">
+  <app-header />
+
+  <main class="pt-24 px-4 md:px-8 max-w-3xl mx-auto">
+
+    <!-- Hero -->
+    <section class="mb-10 text-center md:text-left">
+      <h1 class="text-[2rem] md:text-[3.5rem] font-extrabold text-primary leading-tight tracking-tight mb-4">
+        Reportar Incidente
+      </h1>
+      <p class="text-on-surface-variant text-lg leading-relaxed max-w-xl">
+        Su reporte es confidencial. Ayúdenos a proteger a otros ciudadanos compartiendo detalles sobre entidades sospechosas.
+      </p>
+    </section>
+
+    <!-- Imagen institucional -->
+    <div class="relative rounded-[24px] overflow-hidden h-44 mb-8 shadow-md">
+      <img
+        src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=900&q=80"
+        alt="Seguridad institucional CMF"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-primary/70 to-transparent flex items-center px-8">
+        <p class="text-white font-semibold text-lg max-w-xs leading-snug italic">
+          "Nuestra misión es resguardar la fe pública y la estabilidad del sistema financiero."
+        </p>
+      </div>
+    </div>
+
+    @if (enviado()) {
+      <!-- Confirmación de envío -->
+      <div class="bg-secondary-container p-10 rounded-[32px] text-center mb-8 shadow-sm">
+        <span class="material-symbols-outlined text-6xl text-secondary mb-4 block fill-icon">check_circle</span>
+        <h2 class="text-2xl font-bold text-on-secondary-container mb-2">¡Reporte enviado con éxito!</h2>
+        <p class="text-on-surface-variant">Gracias por contribuir a la seguridad ciudadana. Serás redirigido en unos segundos...</p>
+      </div>
+    } @else {
+      <form (ngSubmit)="enviar()" class="space-y-6">
+
+        <!-- Info card -->
+        <div class="bg-tertiary-fixed p-6 rounded-xl flex items-start gap-4 mb-8">
+          <span class="material-symbols-outlined text-on-tertiary-fixed mt-1 fill-icon">shield</span>
+          <div>
+            <p class="text-on-tertiary-fixed font-bold text-sm uppercase tracking-wider mb-1">Información Segura</p>
+            <p class="text-on-tertiary-fixed-variant text-base">Este proceso es 100% anónimo. La CMF utiliza esta información para alertar a la población y coordinar con fiscalía.</p>
+          </div>
+        </div>
+
+        <!-- Grupo 1 -->
+        <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] space-y-6">
+          <div class="space-y-2">
+            <label class="block text-primary font-bold text-sm tracking-wide">Nombre de la falsa inversión</label>
+            <input
+              [(ngModel)]="nombre" name="nombre"
+              class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 text-on-surface focus:ring-2 focus:ring-primary-container transition-all"
+              placeholder="Ej: Inversiones Globales S.A."
+              type="text"
+              required
+            />
+            <p class="text-on-surface-variant text-xs">Indique el nombre que usaron para contactarle.</p>
+          </div>
+
+          <div class="space-y-4">
+            <label class="block text-primary font-bold text-sm tracking-wide">¿Por dónde te contactaron?</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              @for (canal of ['WhatsApp','Instagram','Telegram','Facebook','Email','Llamada']; track canal) {
+                <label
+                  [class]="isSelected(canal)
+                    ? 'flex items-center gap-3 p-4 bg-primary-fixed rounded-xl cursor-pointer border-2 border-primary-container transition-all group'
+                    : 'flex items-center gap-3 p-4 bg-surface-container-low rounded-xl cursor-pointer hover:bg-surface-variant transition-all group'"
+                  (click)="toggleCanal(canal)">
+                  <input type="checkbox" class="hidden" [checked]="isSelected(canal)" />
+                  <span [class]="isSelected(canal) ? 'text-primary font-bold' : 'text-on-surface-variant font-medium group-hover:text-primary'">
+                    {{ canal }}
+                  </span>
+                  @if (isSelected(canal)) {
+                    <span class="material-symbols-outlined text-primary ml-auto text-base fill-icon">check_circle</span>
+                  }
+                </label>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Grupo 2 -->
+        <div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.04)] space-y-6">
+          <div class="space-y-2">
+            <label class="block text-primary font-bold text-sm tracking-wide">RUT / Cuenta bancaria a la que te pidieron transferir</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant">account_balance</span>
+              <input
+                [(ngModel)]="rut" name="rut"
+                class="w-full bg-surface-container-low border-none rounded-xl py-4 pl-12 pr-5 text-on-surface focus:ring-2 focus:ring-primary-container transition-all"
+                placeholder="RUT o Número de Cuenta"
+                type="text"
+              />
+            </div>
+            <p class="text-on-surface-variant text-xs">Este dato es crucial para rastrear entidades fraudulentas.</p>
+          </div>
+          <div class="space-y-2 pt-2">
+            <label class="block text-primary font-bold text-sm tracking-wide">Detalles adicionales (Opcional)</label>
+            <textarea
+              [(ngModel)]="detalles" name="detalles"
+              class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 text-on-surface focus:ring-2 focus:ring-primary-container transition-all"
+              placeholder="Cuéntenos brevemente qué le prometieron..."
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="pt-6">
+          <button
+            type="submit"
+            class="w-full bg-primary text-on-primary h-14 md:h-16 rounded-xl font-bold text-lg hover:bg-primary-container transition-all active:scale-95 shadow-lg flex items-center justify-center gap-3">
+            <span class="material-symbols-outlined">send</span>
+            Enviar reporte anónimo
+          </button>
+          <p class="text-center text-on-surface-variant text-sm mt-6 px-4">
+            Al enviar este reporte, usted contribuye a la red de seguridad de la CMF.
+            <a href="#" class="underline font-semibold text-primary">Política de Privacidad</a>
+          </p>
+        </div>
+      </form>
+    }
+
+    <!-- Support Section -->
+    <section class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-secondary-container/30 p-8 rounded-[2rem] flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center mb-6">
+            <span class="material-symbols-outlined fill-icon">verified_user</span>
+          </div>
+          <h3 class="text-xl font-bold text-on-secondary-container mb-2">Entidades Verificadas</h3>
+          <p class="text-on-secondary-fixed-variant mb-6">Consulte siempre el listado oficial de instituciones fiscalizadas por la CMF.</p>
+        </div>
+        <a routerLink="/resultado" class="text-on-secondary-container font-bold flex items-center gap-2 hover:translate-x-1 transition-transform cursor-pointer">
+          Ver registro <span class="material-symbols-outlined">chevron_right</span>
+        </a>
+      </div>
+      <div class="relative overflow-hidden rounded-[2rem] min-h-[220px]">
+        <img
+          class="absolute inset-0 w-full h-full object-cover"
+          src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=80"
+          alt="Oficina institucional CMF"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent flex items-end p-8">
+          <p class="text-white font-medium italic text-lg leading-snug">"Proteger al ciudadano es el eje central de nuestra labor regulatoria."</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <app-footer />
+  <app-bottom-nav />
+</div>
