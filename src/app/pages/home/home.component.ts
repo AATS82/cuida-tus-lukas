@@ -50,9 +50,17 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  get displayAlertas() {
+  get displayAlertas(): { nombre: string; descripcion: string; icono: string; tiempo: string }[] {
     const api = this.alertasApi();
-    return api.length > 0 ? api.slice(0, 3) : this.alertas;
+    if (api.length > 0) {
+      return api.slice(0, 3).map(a => ({
+        nombre: a.name,
+        descripcion: a.description,
+        icono: a.icon,
+        tiempo: a.tiempoRelativo
+      }));
+    }
+    return this.alertas;
   }
 
   get displayStats() {

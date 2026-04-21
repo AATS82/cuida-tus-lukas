@@ -3,117 +3,199 @@
 
   <main class="pt-24 px-4 md:px-8 max-w-4xl mx-auto">
 
-    <!-- Alerta roja principal -->
-    <section class="mb-10">
-      <div class="bg-error-container p-8 rounded-xl shadow-[0_10px_40px_rgba(186,26,26,0.1)] border-l-8 border-error">
-        <div class="flex items-start gap-6">
-          <div class="bg-error text-white p-4 rounded-full shrink-0">
-            <span class="material-symbols-outlined text-4xl fill-icon">shield</span>
-          </div>
-          <div class="flex-1">
-            <h1 class="text-3xl font-extrabold text-on-error-container mb-2 leading-tight">
-              ¡Alerta Roja! Alto riesgo de estafa
-            </h1>
-            @if (query()) {
-              <p class="text-on-surface-variant font-semibold mb-2">Análisis de: <span class="text-error font-bold">{{ query() }}</span></p>
-            }
-            <p class="text-on-surface-variant text-lg">Este sitio web o entidad presenta múltiples características de una plataforma fraudulenta no autorizada.</p>
-          </div>
-        </div>
+    <!-- ── LOADING ─────────────────────────────────────────────────────────── -->
+    @if (loading()) {
+      <div class="flex flex-col items-center justify-center py-32 gap-6">
+        <div class="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+        <p class="text-on-surface-variant font-semibold text-lg">Analizando en tiempo real...</p>
+        <p class="text-outline text-sm">Consultando CMF, WHOIS y base de datos de estafas</p>
       </div>
-    </section>
+    }
 
-    <!-- Bento Grid de análisis -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-
-      <!-- CMF Card -->
-      <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
-        <div class="flex items-center justify-between mb-4">
-          <span class="material-symbols-outlined text-error text-3xl fill-icon">cancel</span>
-          <span class="text-xs font-bold bg-error-container text-on-error-container px-3 py-1 rounded-full uppercase">Crítico</span>
-        </div>
-        <h3 class="text-xl font-bold mb-2">¿Está regulado por la CMF Chile?</h3>
-        <p class="text-on-surface-variant mb-6">No se encontraron registros de esta entidad en la base de datos de la Comisión para el Mercado Financiero.</p>
-        <div class="bg-surface-container-low p-4 rounded-lg flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary">info</span>
-          <span class="text-sm font-medium text-primary">Solo opere con entidades autorizadas.</span>
-        </div>
+    <!-- ── ERROR DE CONEXIÓN ───────────────────────────────────────────────── -->
+    @if (apiError() && !loading()) {
+      <div class="bg-surface-container-low border border-outline-variant rounded-2xl p-8 mb-8 text-center">
+        <span class="material-symbols-outlined text-5xl text-outline mb-4 block">wifi_off</span>
+        <h2 class="text-xl font-bold mb-2">No se pudo conectar al servidor</h2>
+        <p class="text-on-surface-variant mb-6">Asegúrate de que el backend esté corriendo en el puerto 8080.</p>
+        <a routerLink="/" class="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold">
+          <span class="material-symbols-outlined">arrow_back</span> Volver al inicio
+        </a>
       </div>
+    }
 
-      <!-- Antigüedad del dominio -->
-      <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
-        <div class="flex items-center justify-between mb-4">
-          <span class="material-symbols-outlined text-error text-3xl fill-icon">cancel</span>
-          <span class="text-xs font-bold bg-error-container text-on-error-container px-3 py-1 rounded-full uppercase">Alerta</span>
-        </div>
-        <h3 class="text-xl font-bold mb-2">Antigüedad del dominio web</h3>
-        <p class="text-on-surface-variant mb-6">El dominio fue registrado hace menos de 3 meses. Las estafas suelen usar sitios web de vida corta.</p>
-        <div class="flex gap-2">
-          <div class="h-2 flex-1 bg-error rounded-full"></div>
-          <div class="h-2 flex-1 bg-surface-container-high rounded-full"></div>
-          <div class="h-2 flex-1 bg-surface-container-high rounded-full"></div>
-        </div>
-        <div class="flex justify-between text-xs text-outline mt-2">
-          <span>Nuevo (riesgo)</span>
-          <span>+1 año (seguro)</span>
-        </div>
-      </div>
+    <!-- ── RESULTADO REAL ──────────────────────────────────────────────────── -->
+    @if (result && !loading()) {
 
-      <!-- Reportes comunidad -->
-      <div class="md:col-span-2 bg-surface-container-lowest p-6 rounded-xl shadow-sm">
-        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
-          <div>
-            <h3 class="text-xl font-bold mb-1">Reportes de la comunidad</h3>
-            <p class="text-on-surface-variant">Actividad reciente detectada por usuarios chilenos.</p>
+      <!-- Cabecera de riesgo dinámica -->
+      @if (result.riskLevel === 'CRITICAL') {
+        <section class="mb-8">
+          <div class="bg-error-container p-8 rounded-2xl border-l-8 border-error shadow-lg">
+            <div class="flex items-start gap-5">
+              <div class="bg-error text-white p-4 rounded-full shrink-0">
+                <span class="material-symbols-outlined text-4xl fill-icon">gpp_bad</span>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <h1 class="text-2xl font-extrabold text-on-error-container">¡Alerta Roja! Alto riesgo de estafa</h1>
+                  <span class="bg-error text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">Score {{ result.riskScore }}/100</span>
+                </div>
+                <p class="text-on-surface-variant font-semibold mb-1">Análisis de: <span class="text-error font-bold">{{ result.query }}</span></p>
+                <p class="text-on-surface-variant">{{ result.summary }}</p>
+              </div>
+            </div>
           </div>
-          <div class="mt-4 md:mt-0 flex items-center gap-2">
-            <span class="text-3xl font-black text-error">12</span>
-            <span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Denuncias</span>
+        </section>
+      }
+
+      @if (result.riskLevel === 'CAUTION') {
+        <section class="mb-8">
+          <div class="bg-secondary-container p-8 rounded-2xl border-l-8 border-secondary shadow-lg">
+            <div class="flex items-start gap-5">
+              <div class="bg-secondary text-on-secondary p-4 rounded-full shrink-0">
+                <span class="material-symbols-outlined text-4xl fill-icon">warning</span>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <h1 class="text-2xl font-extrabold text-on-secondary-container">⚠️ Precaución — Señales de Alerta</h1>
+                  <span class="bg-secondary text-on-secondary text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">Score {{ result.riskScore }}/100</span>
+                </div>
+                <p class="text-on-surface-variant font-semibold mb-1">Análisis de: <span class="text-secondary font-bold">{{ result.query }}</span></p>
+                <p class="text-on-surface-variant">{{ result.summary }}</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="space-y-4">
-          @for (t of testimonios; track t) {
-            <div class="flex items-center gap-4 p-3 bg-surface rounded-lg">
-              <span class="material-symbols-outlined text-error shrink-0">warning</span>
-              <span class="text-sm italic">{{ t }}</span>
+        </section>
+      }
+
+      @if (result.riskLevel === 'SAFE') {
+        <section class="mb-8">
+          <div class="bg-[#d7f5da] p-8 rounded-2xl border-l-8 border-secondary shadow-lg">
+            <div class="flex items-start gap-5">
+              <div class="bg-secondary text-on-secondary p-4 rounded-full shrink-0">
+                <span class="material-symbols-outlined text-4xl fill-icon">verified_user</span>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <h1 class="text-2xl font-extrabold text-on-secondary-container">✅ Sin señales de fraude detectadas</h1>
+                  <span class="bg-secondary text-on-secondary text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">Score {{ result.riskScore }}/100</span>
+                </div>
+                <p class="text-on-surface-variant font-semibold mb-1">Análisis de: <span class="text-secondary font-bold">{{ result.query }}</span></p>
+                <p class="text-on-surface-variant">{{ result.summary }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      }
+
+      <!-- Factores de análisis dinámicos -->
+      <section class="mb-10">
+        <h2 class="text-xl font-bold text-primary mb-5">Factores analizados</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          @for (factor of displayFactores; track factor.title) {
+            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-transparent"
+                 [class.border-error-container]="factor.badge === 'CRITICAL'"
+                 [class.border-secondary-container]="factor.badge === 'ALERT'"
+                 [class.border-outline-variant]="factor.badge === 'UNKNOWN'">
+
+              <!-- Badge + Icono -->
+              <div class="flex items-center justify-between mb-4">
+                @if (factor.badge === 'CRITICAL') {
+                  <span class="material-symbols-outlined text-error text-3xl fill-icon">cancel</span>
+                  <span class="text-xs font-bold bg-error-container text-on-error-container px-3 py-1 rounded-full uppercase">Crítico</span>
+                }
+                @if (factor.badge === 'ALERT') {
+                  <span class="material-symbols-outlined text-secondary text-3xl fill-icon">warning</span>
+                  <span class="text-xs font-bold bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full uppercase">Alerta</span>
+                }
+                @if (factor.badge === 'OK') {
+                  <span class="material-symbols-outlined text-[#2a6b2c] text-3xl fill-icon">check_circle</span>
+                  <span class="text-xs font-bold bg-[#d7f5da] text-[#2a6b2c] px-3 py-1 rounded-full uppercase">OK</span>
+                }
+                @if (factor.badge === 'UNKNOWN') {
+                  <span class="material-symbols-outlined text-outline text-3xl">help</span>
+                  <span class="text-xs font-bold bg-surface-container text-outline px-3 py-1 rounded-full uppercase">Sin datos</span>
+                }
+              </div>
+
+              <h3 class="text-base font-bold mb-2">{{ factor.title }}</h3>
+              <p class="text-on-surface-variant text-sm mb-3">{{ factor.description }}</p>
+
+              @if (factor.detail) {
+                <div class="bg-surface-container-low p-3 rounded-lg flex items-start gap-2 mt-2">
+                  <span class="material-symbols-outlined text-primary text-sm shrink-0">info</span>
+                  <span class="text-xs font-medium text-primary">{{ factor.detail }}</span>
+                </div>
+              }
             </div>
           }
         </div>
+      </section>
+
+      <!-- Reportes ciudadanos -->
+      @if (displayReportes > 0 || (displayTestimonios && displayTestimonios.length > 0)) {
+        <section class="bg-surface-container-lowest p-6 rounded-xl shadow-sm mb-10">
+          <div class="flex flex-col md:flex-row md:items-center justify-between mb-5">
+            <div>
+              <h3 class="text-xl font-bold mb-1">Reportes de la comunidad</h3>
+              <p class="text-on-surface-variant text-sm">Denuncias de usuarios chilenos sobre esta entidad.</p>
+            </div>
+            <div class="mt-3 md:mt-0 flex items-center gap-2">
+              <span class="text-3xl font-black" [class.text-error]="displayReportes > 0" [class.text-outline]="displayReportes === 0">{{ displayReportes }}</span>
+              <span class="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Denuncia{{ displayReportes !== 1 ? 's' : '' }}</span>
+            </div>
+          </div>
+          @if (displayTestimonios && displayTestimonios.length > 0) {
+            <div class="space-y-3">
+              @for (t of displayTestimonios; track t) {
+                <div class="flex items-start gap-3 p-3 bg-surface rounded-lg">
+                  <span class="material-symbols-outlined text-error shrink-0 mt-0.5">format_quote</span>
+                  <span class="text-sm italic text-on-surface-variant">{{ t }}</span>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="text-sm text-outline italic">Sin testimonios ciudadanos registrados aún.</p>
+          }
+        </section>
+      }
+
+      <!-- Botones de acción -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-14">
+        <a routerLink="/" class="w-full sm:w-auto h-14 px-8 rounded-xl bg-surface-container-high text-on-surface font-bold hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
+          <span class="material-symbols-outlined">search</span>
+          Volver a buscar
+        </a>
+        <a routerLink="/reportar" [queryParams]="{plataforma: result.query}" class="w-full sm:w-auto h-14 px-8 rounded-xl bg-primary text-on-primary font-bold hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg">
+          <span class="material-symbols-outlined">campaign</span>
+          Reportar esta entidad
+        </a>
       </div>
-    </div>
+    }
 
-    <!-- Verification Badge -->
-    <div class="mb-12 flex flex-col items-center justify-center p-8 bg-surface-container rounded-3xl text-center">
-      <div class="w-24 h-24 rounded-full bg-secondary-fixed flex items-center justify-center mb-4 shadow-lg border-4 border-white/50">
-        <span class="material-symbols-outlined text-4xl text-on-secondary-fixed-variant fill-icon">verified</span>
+    <!-- ── SIN QUERY (acceso directo a /resultado) ─────────────────────────── -->
+    @if (!result && !loading() && !apiError()) {
+      <div class="flex flex-col items-center justify-center py-24 text-center">
+        <span class="material-symbols-outlined text-6xl text-outline mb-4">search</span>
+        <h2 class="text-2xl font-bold mb-3">Ingresa una consulta</h2>
+        <p class="text-on-surface-variant mb-6">Escribe el link de la plataforma, el RUT o el nombre de la entidad.</p>
+        <a routerLink="/" class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold hover:opacity-90">
+          Ir al buscador
+        </a>
       </div>
-      <h4 class="text-xl font-bold text-primary mb-2">Aprenda a Identificar</h4>
-      <p class="text-on-surface-variant max-w-md mx-auto">Las instituciones reales nunca le pedirán transferencias a cuentas de personas naturales.</p>
-    </div>
+    }
 
-    <!-- Botones de acción -->
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-      <a routerLink="/" class="w-full sm:w-auto h-14 px-8 rounded-xl bg-surface-container-high text-on-surface font-bold hover:bg-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined">search</span>
-        Volver a buscar
-      </a>
-      <a routerLink="/reportar" class="w-full sm:w-auto h-14 px-8 rounded-xl bg-primary text-on-primary font-bold hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg">
-        <span class="material-symbols-outlined">campaign</span>
-        Reportar esta entidad
-      </a>
-    </div>
-
-    <!-- Alertas recientes completas -->
-    <section class="mb-12">
-      <div class="flex items-end justify-between mb-8">
+    <!-- ── HISTORIAL DE ALERTAS (siempre visible) ──────────────────────────── -->
+    <section class="mb-10">
+      <div class="flex items-end justify-between mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-primary mb-1">Historial de Alertas</h2>
+          <h2 class="text-xl font-bold text-primary mb-1">Otras alertas recientes</h2>
           <p class="text-on-surface-variant text-sm">Plataformas reportadas en los últimos 30 días.</p>
         </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         @for (a of alertasRecientes; track a.nombre) {
-          <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm hover:shadow-md transition-all border border-transparent hover:border-error-container flex items-start gap-4">
+          <div class="bg-surface-container-lowest p-5 rounded-2xl shadow-sm hover:shadow-md transition-all border border-transparent hover:border-error-container flex items-start gap-4">
             <div class="w-10 h-10 bg-error-container text-on-error-container rounded-xl flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-lg">warning</span>
             </div>
@@ -131,7 +213,7 @@
     </section>
 
     <!-- Imagen institucional -->
-    <div class="relative rounded-[24px] overflow-hidden h-48 mb-8 shadow-md">
+    <div class="relative rounded-[24px] overflow-hidden h-40 mb-8 shadow-md">
       <img
         src="https://images.unsplash.com/photo-1464938050520-ef2270bb8ce8?w=1000&q=80"
         alt="Sede CMF Chile"
@@ -140,7 +222,7 @@
       <div class="absolute inset-0 bg-gradient-to-r from-primary/75 to-transparent flex items-center px-8">
         <div>
           <p class="text-white/80 text-xs font-semibold uppercase tracking-widest mb-1">Comisión para el Mercado Financiero</p>
-          <h3 class="text-white text-2xl font-extrabold leading-tight max-w-xs">
+          <h3 class="text-white text-xl font-extrabold leading-tight max-w-xs">
             Denuncie. Proteja a otros chilenos.
           </h3>
         </div>

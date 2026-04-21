@@ -121,16 +121,16 @@
         </a>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        @for (alerta of displayAlertas; track alerta.nombre ?? alerta['name']) {
+        @for (alerta of displayAlertas; track alerta.nombre) {
           <div class="bg-surface-container-lowest p-8 rounded-[32px] shadow-sm hover:shadow-xl transition-all duration-300 group border border-transparent hover:border-error-container">
             <div class="w-14 h-14 bg-error-container text-on-error-container rounded-2xl flex items-center justify-center mb-6">
               <span class="material-symbols-outlined text-3xl">{{ alerta.icono }}</span>
             </div>
-            <h3 class="text-xl font-bold text-on-background mb-2">{{ alerta.nombre ?? alerta['name'] }}</h3>
-            <p class="text-on-surface-variant mb-6 text-sm">{{ alerta.descripcion ?? alerta['description'] }}</p>
+            <h3 class="text-xl font-bold text-on-background mb-2">{{ alerta.nombre }}</h3>
+            <p class="text-on-surface-variant mb-6 text-sm">{{ alerta.descripcion }}</p>
             <div class="pt-6 border-t border-surface-container-high flex items-center justify-between">
               <span class="text-xs font-bold uppercase tracking-widest text-error">Riesgo Crítico</span>
-              <span class="text-xs text-outline">{{ alerta.tiempo ?? alerta['tiempoRelativo'] }}</span>
+              <span class="text-xs text-outline">{{ alerta.tiempo }}</span>
             </div>
           </div>
         }

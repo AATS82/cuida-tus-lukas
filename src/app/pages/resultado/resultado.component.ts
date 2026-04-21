@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { BottomNavComponent } from '../../shared/bottom-nav/bottom-nav.component';
-import { ApiService, AnalysisResponse } from '../../services/api.service';
+import { ApiService, AnalysisResponse, AnalysisFactor } from '../../services/api.service';
 
 @Component({
   selector: 'app-resultado',
@@ -16,10 +16,10 @@ export class ResultadoComponent implements OnInit {
   analysisResult = signal<AnalysisResponse | null>(null);
   apiError = signal(false);
 
-  factores = [
-    { ok: false, titulo: '¿Está regulado por la CMF Chile?', descripcion: 'No se encontraron registros de esta entidad en la base de datos de la Comisión para el Mercado Financiero.', badge: 'Crítico', detalle: 'Solo opere con entidades autorizadas.' },
-    { ok: false, titulo: 'Antigüedad del dominio web', descripcion: 'El dominio fue registrado hace menos de 3 meses. Las estafas suelen usar sitios web de vida corta.', badge: 'Alerta', detalle: null },
-    { ok: false, titulo: 'Reportes de la comunidad', descripcion: 'Actividad reciente detectada por usuarios chilenos.', badge: 'Crítico', detalle: null, denuncias: 12 }
+  factores: AnalysisFactor[] = [
+    { safe: false, title: '¿Está regulado por la CMF Chile?', description: 'No se encontraron registros de esta entidad en la base de datos de la Comisión para el Mercado Financiero.', badge: 'CRITICAL', detail: 'Solo opere con entidades autorizadas.' },
+    { safe: false, title: 'Antigüedad del dominio web', description: 'El dominio fue registrado hace menos de 3 meses. Las estafas suelen usar sitios web de vida corta.', badge: 'ALERT', detail: undefined },
+    { safe: false, title: 'Reportes de la comunidad', description: 'Actividad reciente detectada por usuarios chilenos.', badge: 'CRITICAL', detail: undefined }
   ];
 
   testimonios = [
