@@ -23,6 +23,7 @@ export interface AnalysisResponse {
   communityReports: number;
   knownScam: boolean;
   testimonials: string[];
+  contentKeywordsDetected: string[];
   factors: AnalysisFactor[];
   summary: string;
 }

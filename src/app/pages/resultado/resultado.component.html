@@ -8,7 +8,9 @@
       <div class="flex flex-col items-center justify-center py-32 gap-6">
         <div class="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
         <p class="text-on-surface-variant font-semibold text-lg">Analizando en tiempo real...</p>
-        <p class="text-outline text-sm">Consultando CMF, WHOIS y base de datos de estafas</p>
+        <p class="text-outline text-sm text-center max-w-xs">
+          CMF · WHOIS · Patrón de dominio · Google Safe Browsing · Contenido del sitio · VirusTotal · Lista negra · Reportes ciudadanos
+        </p>
       </div>
     }
 
@@ -185,32 +187,34 @@
       </div>
     }
 
-    <!-- ── HISTORIAL DE ALERTAS (siempre visible) ──────────────────────────── -->
-    <section class="mb-10">
-      <div class="flex items-end justify-between mb-6">
-        <div>
-          <h2 class="text-xl font-bold text-primary mb-1">Otras alertas recientes</h2>
-          <p class="text-on-surface-variant text-sm">Plataformas reportadas en los últimos 30 días.</p>
+    <!-- ── HISTORIAL DE ALERTAS (desde API) ──────────────────────────────── -->
+    @if (alertasApi().length > 0) {
+      <section class="mb-10">
+        <div class="flex items-end justify-between mb-6">
+          <div>
+            <h2 class="text-xl font-bold text-primary mb-1">Otras alertas recientes</h2>
+            <p class="text-on-surface-variant text-sm">Plataformas reportadas en los últimos 30 días.</p>
+          </div>
         </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        @for (a of alertasRecientes; track a.nombre) {
-          <div class="bg-surface-container-lowest p-5 rounded-2xl shadow-sm hover:shadow-md transition-all border border-transparent hover:border-error-container flex items-start gap-4">
-            <div class="w-10 h-10 bg-error-container text-on-error-container rounded-xl flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-lg">warning</span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <h4 class="font-bold text-on-background mb-1 truncate">{{ a.nombre }}</h4>
-              <p class="text-on-surface-variant text-sm mb-2">{{ a.descripcion }}</p>
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold uppercase tracking-widest text-error">Riesgo Crítico</span>
-                <span class="text-xs text-outline">{{ a.tiempo }}</span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          @for (a of alertasApi(); track a.id) {
+            <div class="bg-surface-container-lowest p-5 rounded-2xl shadow-sm hover:shadow-md transition-all border border-transparent hover:border-error-container flex items-start gap-4">
+              <div class="w-10 h-10 bg-error-container text-on-error-container rounded-xl flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-lg">{{ a.icon || 'warning' }}</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h4 class="font-bold text-on-background mb-1 truncate">{{ a.name }}</h4>
+                <p class="text-on-surface-variant text-sm mb-2">{{ a.description }}</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold uppercase tracking-widest text-error">Riesgo {{ a.riskLevel }}</span>
+                  <span class="text-xs text-outline">{{ a.tiempoRelativo }}</span>
+                </div>
               </div>
             </div>
-          </div>
-        }
-      </div>
-    </section>
+          }
+        </div>
+      </section>
+    }
 
     <!-- Imagen institucional -->
     <div class="relative rounded-[24px] overflow-hidden h-40 mb-8 shadow-md">
